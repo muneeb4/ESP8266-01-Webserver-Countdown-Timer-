@@ -1,12 +1,3 @@
-//LOCAL IP ESP8266 WEBSERVER USING SOFT-AP MODE (192.168.4.1)
-// TIMER PULSE IN MINUTES Activating GPIO2 HIGH(3.3V)
-//timer using Arduino millis() function -> https://www.arduino.cc/en/Tutorial/BuiltInExamples/BlinkWithoutDelay/
-//HTML and further code is included from the tutorials on 
-//https://randomnerdtutorials.com/esp32-esp8266-web-server-timer-pulse/
-//https://randomnerdtutorials.com/esp32-websocket-server-arduino/
-//https://randomnerdtutorials.com/esp8266-nodemcu-access-point-ap-web-server/
-//https://css-tricks.com/building-progress-ring-quickly/  
-//https://stackoverflow.com/questions/39846282/how-to-add-the-text-on-and-off-to-toggle-button
 #include <ArduinoJson.h>
 #include <BearSSLHelpers.h>
 #include <CertStoreBearSSL.h>

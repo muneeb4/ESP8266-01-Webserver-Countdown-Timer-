@@ -227,10 +227,10 @@ document.getElementById("myRange").disabled=false;
 //   xhr.open("GET", "/timer?value="+elapsedTime, true);
 // xhr.send();
 //}
-function stop() {
-  clearInterval(timer);
-  timer=null;
-}
+//function stop() {
+//  clearInterval(timer);
+//  timer=null;
+//}
 function myFunction(){
 //  xhr.onreadystatechange = function() {
 //    if (this.readyState == 4 && this.status == 200) {

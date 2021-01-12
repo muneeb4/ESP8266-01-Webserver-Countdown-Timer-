@@ -29,7 +29,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     h2 {font-size: 2.4rem;}
     p {font-size: 2.2rem;}
     body {max-width: 600px; margin:0px auto; padding-bottom: 25px;}
-    .slider1{width: 100%;}
+    .slider1 {width: 100%;}
     .slider1 { -webkit-appearance: none; margin: 14px; width: 400px; height: 20px; border-radius: 10px; background: #c1c1c1; outline: none; opacity:0.7; -webkit-transition: .2s; transition: opacity 2s;}
     .slider1:hover { opacity:1; }
     .slider1::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 25px; height: 45px; border-radius: 20px; background:#2c3e50; cursor: pointer;}
@@ -49,12 +49,12 @@ const char index_html[] PROGMEM = R"rawliteral(
     .progress-ring__circle {transition: 0.35s stroke-dashoffset;transform: rotate(-90deg);transform-origin: 60px 60px;}
     </style>
 </head>
-<body onload ="myFunction()">
+<body onload ="myFunction()" >
         <h2>Countdown Timer</h2>
         <p><svg class="progress-ring" width="120" height="120" id='t'><g><circle stroke="lightgrey" stroke-width="15" fill="none" r="52" cx="60" cy="60" ></circle><circle class="progress-ring__circle" stroke=#00B5E2 stroke-width="15" fill="transparent" r="52" cx="60" cy="60" id='c'></circle><text x="60" y="60" text-anchor="middle" stroke="red" fill="red" stroke-width="1" dy=".3em" id='txt'></text></g></svg></p>
         <p><input type="range" onchange="updateSliderTimer(this)" min="1" max="20" value=%TIMERVALUE% class="slider1" id="myRange" step="1"></p>
         %BUTTONPLACEHOLDER%
-<script>
+<script  >
 var gateway = `ws://${window.location.hostname}/ws`;
 var websocket;  
 window.addEventListener('load', onLoad);
@@ -83,28 +83,31 @@ function onOpen(event) {
     console.log('Connection closed');
     setTimeout(initWebSocket, 2000);
   }
-  
   function onMessage(event) { 
+    
     var text = document.getElementById('txt');
     if(event.data=="false"){
+      
       document.getElementById("startButton").checked=false;
       document.getElementById("myRange").disabled=false;
       }
-    else if (event.data=="true"){
+      else if (event.data=="true"){
         document.getElementById("myRange").disabled=true;
         document.getElementById("startButton").checked=true;
+        
         }
-    else{
-        text.innerHTML =event.data + "m";
-        setProgress(Number(event.data));
-        if (document.getElementById("startButton").checked!=true){
-                 document.getElementById("myRange").value=event.data;
+        else{
+   text.innerHTML =event.data + "m";
+    setProgress(Number(event.data));
+if (document.getElementById("startButton").checked!=true){
+      document.getElementById("myRange").value=event.data;
       }
-    }
+     }
   }
  
   function onLoad(event) {
     initWebSocket();
+   
   }
 
 function start(element){
@@ -167,31 +170,30 @@ String processor(const String& var){
 
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
-
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
     data[len] = 0;//strcmp((char*)data, "toggle") == 0
     if (String((char*)data)=="true") {
       digitalWrite(output, HIGH);
       buttonValue=String((char*)data);
-      ws.textAll(buttonValue);      
+      ws.textAll(buttonValue);
+      
     }
-
     else if (String((char*)data)=="false")
     {
       digitalWrite(output, LOW);
       buttonValue=String((char*)data);
       ws.textAll(buttonValue);
-    }
-    
+     
+        
+      }
     else if (*data >= (uint8_t)('0' + 1) && *data <= (uint8_t)('0' + 20)) {
        timerSliderValue=String((char*)(data));
       secsCount=0;
       minsCount=timerSliderValue.toInt();
       count=minsCount;
       ws.textAll(timerSliderValue);
-     Serial.println(timerSliderValue);
       }
-    else{}
+      else{}
   }
 }
 
@@ -245,6 +247,7 @@ initWebSocket();
 }
 void loop() {
  
+      
       unsigned long currentMillis=millis();
        
  if (buttonValue!="true"){
@@ -254,9 +257,11 @@ void loop() {
   if (buttonValue=="true" && (unsigned long)(currentMillis - previousMillis) >= interval) {
      previousMillis=currentMillis;
      secsCount=secsCount+1;
-      if (secsCount==sec){  
+      if (secsCount==sec){
+  
   minsCount=minsCount-1;
   secsCount=0;
+ 
   }
   
    if(minsCount==0){
@@ -271,8 +276,9 @@ void loop() {
     if(minsCount==count){
  ws.textAll(String(minsCount));
  count=count-1;
+
     }
- 
+  }
  else if (buttonValue=="false"){
   } 
  }

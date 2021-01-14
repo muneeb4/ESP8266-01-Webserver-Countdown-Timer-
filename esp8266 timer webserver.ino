@@ -119,7 +119,6 @@ function start(element){
 } 
 
 function myFunction(){
-
 var text = document.getElementById('txt');
     text.innerHTML=%TIMVAL% + "m";
 setProgress(Number(%TIMVAL%));
@@ -176,15 +175,12 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
       digitalWrite(output, HIGH);
       buttonValue=String((char*)data);
       ws.textAll(buttonValue);
-      
     }
     else if (String((char*)data)=="false")
     {
       digitalWrite(output, LOW);
       buttonValue=String((char*)data);
       ws.textAll(buttonValue);
-     
-        
       }
     else if (*data >= (uint8_t)('0' + 1) && *data <= (uint8_t)('0' + 20)) {
        timerSliderValue=String((char*)(data));
@@ -201,10 +197,10 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
              void *arg, uint8_t *data, size_t len) {
   switch (type) {
     case WS_EVT_CONNECT:
-      Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+     // Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
       break;
     case WS_EVT_DISCONNECT:
-      Serial.printf("WebSocket client #%u disconnected\n", client->id());
+      //Serial.printf("WebSocket client #%u disconnected\n", client->id());
       break;
     case WS_EVT_DATA:
       handleWebSocketMessage(arg, data, len);
@@ -222,21 +218,21 @@ void initWebSocket() {
 
 void setup(){
   // Serial port for debugging purposes
-  Serial.begin(115200);
+  //Serial.begin(115200);
 
   pinMode(output, OUTPUT);
   digitalWrite(output, LOW);
 
   // Connect to Wi-Fi
-  Serial.print("Setting AP (Access Point)…");
+  //Serial.print("Setting AP (Access Point)…");
   // Remove the password parameter, if you want the AP (Access Point) to be open
   WiFi.softAP(ssid);
 
-  IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(IP);
+ // IPAddress IP = WiFi.softAPIP();
+  //Serial.print("AP IP address: ");
+  //Serial.println(IP);
   // Print ESP Local IP Address
-  Serial.println(WiFi.localIP());
+ // Serial.println(WiFi.localIP());
 initWebSocket();
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -245,11 +241,8 @@ initWebSocket();
   // Start server
   server.begin();
 }
-void loop() {
- 
-      
+void loop() {    
       unsigned long currentMillis=millis();
-       
  if (buttonValue!="true"){
   previousMillis=currentMillis;
   }
@@ -257,11 +250,10 @@ void loop() {
   if (buttonValue=="true" && (unsigned long)(currentMillis - previousMillis) >= interval) {
      previousMillis=currentMillis;
      secsCount=secsCount+1;
+      
       if (secsCount==sec){
-  
   minsCount=minsCount-1;
   secsCount=0;
- 
   }
   
    if(minsCount==0){

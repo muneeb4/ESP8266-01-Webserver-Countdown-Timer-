@@ -8,3 +8,5 @@ https://randomnerdtutorials.com/esp32-esp8266-web-server-timer-pulse/
 https://randomnerdtutorials.com/esp32-websocket-server-arduino/
 HOW TO PROGRAM ESP-01 FROM Arduino ide ->  https://www.allaboutcircuits.com/projects/breadboard-and-program-an-esp-01-circuit-with-the-arduino-ide/  
 How to interface Relay ->  https://techiesms.com/iot-projects/esp01-projects/control-relay-with-esp8266-01-module/
+![image](https://user-images.githubusercontent.com/66637152/107858892-5e1bf500-6e58-11eb-8478-8fba6bc10d73.png)
+https://electronics.stackexchange.com/questions/488288/esp8266-not-working-to-drive-relay

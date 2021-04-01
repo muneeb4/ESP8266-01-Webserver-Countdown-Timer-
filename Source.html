@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+    <html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Countdown Timer</title>
+<style>
+    html {font-family: Arial; display: inline-block; text-align: center;}
+    h2 {font-size: 2.4rem;}
+    p {font-size: 2.2rem;}
+    body {max-width: 600px; margin:0px auto; padding-bottom: 25px;}
+    .slidecontainer {width: 100%;}
+    .slider1 { -webkit-appearance: none; margin: 14px; width: 400px; height: 20px; border-radius: 10px; background: #c1c1c1; outline: none; opacity:0.7; -webkit-transition: .2s; transition: opacity 2s;}
+    .slider1:hover { opacity:1; }
+    .slider1::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 25px; height: 45px; border-radius: 20px; background:#2c3e50; cursor: pointer;}
+    .slider1::-moz-range-thumb {width:30px; height: 30px; background: #2c3e50; cursor: pointer;}
+    .switch {position: relative; display: inline-block; width: 120px; height: 68px;}
+    .switch input {display: none}
+    .slider {position: absolute;cursor: pointer;top:0; left:0; right:0; bottom:0; background-color: #ca2222; -webkit-transition: .4s; transition: .4s; border-radius: 34px;}
+    .slider:before { position: absolute; content: ""; height: 52px; width: 52px; left: 8px; bottom: 8px; background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 68px;}
+     input:checked + .slider {background-color: #2ab934;}
+     input:focus + .slider {box-shadow: 0 0 1px #2196F3;}
+    input:checked + .slider:before { -webkit-transform: translateX(52px);-ms-transform: translateX(52px) ;transform: translateX(52px);}
+    .slider:after{ content: 'OFF'; color: white; display: block; position: absolute; transform: translate(-10px,-10px);top: 35px;left: 85px; font-size: 15px; font-family: Verdana, sans-serif;}
+    input:checked + .slider:after{ content: 'ON';left: 35px;}
+    .slider.round{border-radius: 68px;}
+    .slider.round:before {border-radius: 68px;}
+    .progress-ring {}
+    .progress-ring__circle {transition: 0.35s stroke-dashoffset;transform: rotate(-90deg);transform-origin: 60px 60px;}
+    </style>
+</head>
+<body onload ="myFunction()" >
+        <h2>Countdown Timer</h2>
+        <p><svg class="progress-ring" width="120" height="120" id='t'><g><circle stroke="lightgrey" stroke-width="15" fill="none" r="52" cx="60" cy="60" ></circle><circle class="progress-ring__circle" stroke=#00B5E2 stroke-width="15" fill="transparent" r="52" cx="60" cy="60" id='c'></circle><text x="60" y="60" text-anchor="middle" stroke="red" fill="red" stroke-width="1" dy=".3em" id='txt'></text></g></svg></p>
+        <p><input type="range" onchange="updateSliderTimer(this)" min="1" max="20" value=10 class="slider1" id="myRange" step="1"></p>
+        <p><label class="switch"><input type="checkbox" id="startButton" onchange="start(this)" /><span class="slider round"></span></label></p>
+<script  >
+var gateway = `ws://${window.location.hostname}/ws`;
+var websocket;  
+window.addEventListener('load', onLoad);
+var circle = document.getElementById('c');
+var radius = circle.r.baseVal.value;
+var circumference = radius * 2 * Math.PI;
+circle.style.strokeDasharray = `${circumference} ${circumference}`;
+circle.style.strokeDashoffset = `${circumference}`;
+
+function setProgress(percent) {
+  const offset = circumference - percent / Number(document.getElementById("myRange").max)* circumference;
+  circle.style.strokeDashoffset = offset;
+}
+
+function initWebSocket() {
+    console.log('Trying to open a WebSocket connection...');
+    websocket = new WebSocket(gateway);
+    websocket.onopen    = onOpen;
+    websocket.onclose   = onClose;
+    websocket.onmessage = onMessage; // <-- add this line
+  }
+function onOpen(event) {
+    console.log('Connection opened');
+  }
+  function onClose(event) {
+    console.log('Connection closed');
+    setTimeout(initWebSocket, 2000);
+  }
+  function onMessage(event) { 
+    
+    var text = document.getElementById('txt');
+    if(event.data=="false"){
+      
+      document.getElementById("startButton").checked=false;
+      document.getElementById("myRange").disabled=false;
+      }
+      else if (event.data=="true"){
+        document.getElementById("myRange").disabled=true;
+        document.getElementById("startButton").checked=true;
+        
+        }
+        else{
+   text.innerHTML =event.data + "m";
+    setProgress(Number(event.data));
+if (document.getElementById("startButton").checked!=true){
+      document.getElementById("myRange").value=event.data;
+      }
+     }
+  }
+ 
+  function onLoad(event) {
+    initWebSocket();
+   
+  }
+
+function start(element){
+ var state;
+     if(element){
+     state = element.checked; 
+     websocket.send('' +state);   
+     }
+} 
+
+function myFunction(){
+
+var text = document.getElementById('txt');
+    text.innerHTML=10 + "m";
+setProgress(Number(10));
+}
+
+function updateSliderTimer(element) {
+ var valueSlider = document.getElementById("myRange").value;
+ websocket.send('' +valueSlider);
+  setProgress(Number(valueSlider));
+ var text = document.getElementById('txt');
+    text.innerHTML=valueSlider + "m ";
+}
+</script>      
+</body>
+</html>

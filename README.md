@@ -1,6 +1,6 @@
 # ESP8266_Countdown_Timer
 # ![image](https://user-images.githubusercontent.com/66637152/104062812-ee916500-521c-11eb-9f08-0e51e7a6d239.jpg)  
-# ![20210214_084036](https://user-images.githubusercontent.com/66637152/107868293-11aad680-6ea5-11eb-8371-6b4b0bcd44fe.jpg)
+# ![diagram](https://user-images.githubusercontent.com/66637152/124592277-b6d74300-de76-11eb-97cd-34ae19075ab0.jpg)
 LOCAL IP ESP8266 WEBSERVER USING SOFT-AP MODE (192.168.4.1)  
 TIMER PULSE IN MINUTES Activating GPIO2 or GPIO0 HIGH for specified time  
 Timer using Arduino millis() function -> https://www.arduino.cc/en/Tutorial/BuiltInExamples/BlinkWithoutDelay/  
